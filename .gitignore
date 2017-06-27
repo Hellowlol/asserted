@@ -45,3 +45,28 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# python
+.Cache
+__pycache__/
+#*.py[cod]
+#*$py.class
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
