@@ -17,11 +17,11 @@ def hello():
 
 
 def test_asserted(tmpdir):
-    asserted.assert_writer(asserted.example_class.Ex(), write_full_tests=True, save_path=tmpdir)
+    asserted.assert_writer(asserted.example_class.Ex(), write_full_tests=True, save_path=str(tmpdir))
 
 
 def test_asserted_as_function(tmpdir):
-    r = asserted.assert_writer(hello, write_full_tests=True, save_path=tmpdir)
+    r = asserted.assert_writer(hello, write_full_tests=True, save_path=str(tmpdir))
     assert r == """def test_hello():
     hello = hello
     assert hello.hello() == "is it me your looking for?"
