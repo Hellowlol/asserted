@@ -56,11 +56,6 @@ def assert_writer(func, include_private=False, only_attributes=False,
         func = loop.run_until_complete(func)
 
     org_name = func.__class__.__name__.lower()
-    #try:
-    #    org_name = func.__class__.__name__.lower()
-    #except AttributeError:
-    #    # Normal functions isnt suppored at TODO
-    #    org_name = func.__name__.lower()
 
     attrs = internals(func, include_private=include_private,
                       only_attributes=only_attributes)
@@ -92,8 +87,13 @@ def assert_writer(func, include_private=False, only_attributes=False,
             value = list(value)
             variable_name = 'list(%s)' % variable_name
 
-        if sort_iterables and isinstance(value, (list, tuple)):
-            pass # TODO
+        if sort_iterables and isinstance(value, (list, tuple, dict)):
+            if isinstance(value, dict):
+                value = sorted(value.items())
+                variable_name = 'sorted(%s.items())' % variable_name
+            else:
+                value = sorted(value)
+                variable_name = 'sorted(%s)' % variable_name
 
         # Handle overrides..
         if fixups:

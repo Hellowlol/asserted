@@ -17,7 +17,8 @@ def hello():
 
 
 def test_asserted(tmpdir):
-    asserted.assert_writer(asserted.example_class.Ex(), write_full_tests=True, save_path=str(tmpdir))
+    asserted.assert_writer(asserted.example_class.Ex(), write_full_tests=True,
+                           save_path=str(tmpdir), sort_iterables=True)
 
 
 def test_asserted_as_function(tmpdir):
@@ -32,16 +33,17 @@ def test_asserted_as_function(tmpdir):
 def test_ex():
     ex = asserted.example_class.Ex()
     assert ex.a_classmethod() == "a_classmethod"
-    assert list(ex.a_generator_function()) == [0, 1, 2]
+    assert sorted(list(ex.a_generator_function())) == [0, 1, 2]
     assert ex.a_staticmethod() == "a_staticmethod"
     assert ex.att1 == "att1"
     assert ex.data == "data"
     assert str(ex.is_datetime.date()) == "1970-01-01"
-    assert ex.is_dict == {}
+    assert sorted(ex.is_dict.items()) == [('a', 'a'), ('b', 'b')]
     assert ex.is_float == 0.5
-    assert list(ex.is_generator_expression) == [0, 1]
+    assert sorted(list(ex.is_generator_expression)) == [0, 1]
     assert ex.is_int == 1
-    assert ex.is_list == []
+    assert sorted(ex.is_list) == [1, 2, 3, 4, 5]
+    assert sorted(ex.is_tuple) == [1, 2, 3]
     assert ex.method() == "method"
     assert ex.props == "props"
 
@@ -52,4 +54,3 @@ def test_ex():
         assert async_metod == "async_metod"
         async_metod_two = await ex.async_metod_two()
         assert async_metod_two == "async_metod_two"
-    asyncio.get_event_loop().run_until_complete(gogo())

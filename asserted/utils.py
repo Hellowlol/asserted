@@ -112,7 +112,7 @@ def internals(func, only_attributes=True, include_private=False):
     for at in attrs:
         if at.endswith('__'):
             continue
-        if not include_private and at.startswith('_'):
+        elif not include_private and at.startswith('_'):
             continue
         else:
             filter_attrs.append(at)

@@ -1,4 +1,4 @@
-# asserted
+# asserted [![Build Status](https://travis-ci.org/Hellowlol/asserted.svg?branch=master)](https://travis-ci.org/Hellowlol/asserted) [![Cov](https://codecov.io/gh/hellowlol/asserted/branch/master/graph/badge.svg)](https://codecov.io/gh/hellowlol/asserted/branch/master)
 
 Is a simple tool to writes a pytest for the object your pass to it.
 This is no way near perfect, you still have to handle imports, fixtures at but it handy if you need to check that all the properties are correct.

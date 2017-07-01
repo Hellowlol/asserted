@@ -7,10 +7,9 @@ python:
   #- "3.4"
   - "3.5"
 before_install:
-    #- sudo apt-get install ffmpeg
     - pip install --upgrade pip
     - pip install pytest pytest-cov
-    - pip install coveralls
+    - pip install codecov
 # command to install dependencies
 #install: "pip install -r requirements.txt"
 #before_script:
@@ -18,4 +17,4 @@ before_install:
 # command to run tests
 script: py.test -v --cov=$TRAVIS_BUILD_DIR/ --cov-report term-missing
 after_success:
-    - coveralls
+    - codecov

@@ -2,12 +2,13 @@ import asyncio
 import datetime
 
 
-class Ex:
+class Ex(object):
     def __init__(self):
         self.data = 'data'
         self.att1 = 'att1'
-        self.is_list = []
-        self.is_dict = {}
+        self.is_list = [5, 4, 3, 2, 1]
+        self.is_tuple = (3, 2, 1)
+        self.is_dict = {'b': 'b', 'a': 'a'}
         self.is_int = 1
         self.is_float = 0.5
         self.is_generator_expression = (i for i in range(2))
