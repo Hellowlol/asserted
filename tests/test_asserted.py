@@ -1,31 +1,35 @@
 import sys
 import os
 import logging
-import asyncio
+
 import datetime
 
+import asyncio
 
 logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)
 
 
 from .conftest import asserted
 
-for d in sorted(dir(asserted)):
-    print(d)
-
 
 def hello():
     return 'is it me your looking for?'
 
 
-def test_asserted():
-    asserted.assert_writer(asserted.example_class.Ex(), write_full_tests=True)
-
-def test_asserted_as_function():
-    asserted.assert_writer(hello, write_full_tests=True)
+def test_asserted(tmpdir):
+    asserted.assert_writer(asserted.example_class.Ex(), write_full_tests=True, save_path=tmpdir)
 
 
-def _test_ex():
+def test_asserted_as_function(tmpdir):
+    r = asserted.assert_writer(hello, write_full_tests=True, save_path=tmpdir)
+    assert r == """def test_hello():
+    hello = hello
+    assert hello.hello() == "is it me your looking for?"
+"""
+
+# This is the what test_asserted writes to files.
+# find a way to test that dynamically.
+def test_ex():
     ex = asserted.example_class.Ex()
     assert ex.a_classmethod() == "a_classmethod"
     assert list(ex.a_generator_function()) == [0, 1, 2]

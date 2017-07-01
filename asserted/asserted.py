@@ -10,8 +10,9 @@ __all__ = ['assert_writer']
 LOG = logging.getLogger(__name__)
 
 
-def assert_writer(func, fn=None, include_private=False, only_attributes=False,
-                  write_full_tests=False, test_prefix='test_', save_path='', fixups=None, unpack_iterables=False):
+def assert_writer(func, include_private=False, only_attributes=False,
+                  write_full_tests=False, test_prefix='test_', save_path='',
+                  fixups=None, unpack_iterables=True, sort_iterables=False):
     """Simple assert helper that takes automates some of the
        boiler plate when writing unit tests for pytest
 
@@ -26,10 +27,13 @@ def assert_writer(func, fn=None, include_private=False, only_attributes=False,
             fixups(list): [('file_path', 'os.path.basename', os.path.basename)]
 
     """
+
     # Lets see if func belongs to a class. If not we are gonna add it to a class.
-    if func.__class__.__name__ == 'function': # Please find a better way..
+    if func.__class__.__name__ == 'function':  # Please find a better way..
         LOG.debug('Created parent class %s' % func.__name__)
-        func = type(func.__name__, (object,), {func.__name__: func})
+        func = type(func.__name__, (object,), {func.__name__: staticmethod(func)})
+        # So the filename if the function name instead of type.
+        func = func()
 
     if fixups is None:
         fixups = []
@@ -51,11 +55,12 @@ def assert_writer(func, fn=None, include_private=False, only_attributes=False,
         LOG.debug('%s is awaitable executing in eventloop' % func)
         func = loop.run_until_complete(func)
 
-    try:
-        org_name = func.__class__.__name__.lower()
-    except AttributeError:
-        # Normal functions isnt suppored at TODO
-        org_name = func.__name__.lower()
+    org_name = func.__class__.__name__.lower()
+    #try:
+    #    org_name = func.__class__.__name__.lower()
+    #except AttributeError:
+    #    # Normal functions isnt suppored at TODO
+    #    org_name = func.__name__.lower()
 
     attrs = internals(func, include_private=include_private,
                       only_attributes=only_attributes)
@@ -87,6 +92,9 @@ def assert_writer(func, fn=None, include_private=False, only_attributes=False,
             value = list(value)
             variable_name = 'list(%s)' % variable_name
 
+        if sort_iterables and isinstance(value, (list, tuple)):
+            pass # TODO
+
         # Handle overrides..
         if fixups:
             for fix in fixups:
@@ -117,11 +125,6 @@ def assert_writer(func, fn=None, include_private=False, only_attributes=False,
         with open(fn, 'w') as file:
             file.write(t)
             LOG.info('All done. Wrote %s to disks' % os.path.abspath(fn))
-        return
+        return t
 
-    if fn:
-        fn = '%s.txt' % org_name
-        with open(fn, 'a') as file:
-            file.write('    \n'.join(result))
-
-    return result
+    return result + result_async
