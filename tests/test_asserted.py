@@ -1,15 +1,29 @@
-import sys
+import datetime
 import os
 import logging
+import sys
 
-import datetime
+try:
+    import asyncio
+except ImportError:
+    pass
 
-import asyncio
+import pytest
 
 logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)
 
 
 from .conftest import asserted
+
+
+if sys.version_info >= (3, 4):
+    #@asyncio.coroutine
+    async def hey():
+        return 'hey'
+
+    @pytest.mark.xfail(reason='broken')
+    def test_hey(tmpdir):
+        assert 'hey' in asserted.assert_writer(hey, save_path=str(tmpdir)) # broken fixme
 
 
 def hello():
