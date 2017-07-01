@@ -65,17 +65,21 @@ def test_writer(test_prefix, name, caller, results, results_async=''):
 
 def get_caller(f, ln):
     LOG.debug('Checking %s line %s to find what assertwriter was called with' % (f, ln))
-    kek = None
+    found = ''
     with open(os.path.abspath(f)) as f:
         for i, line in enumerate(f.readlines(), 1):
             if i == ln:
 
-                kek = re.search('assert_writer\(([^,]*)', line)
-                if kek:
-                    kek = kek.group(1)
+                found = re.search('assert_writer\((.+)\)', line)
+                if found:
+                    found = found.group(1)
+                    # Check if assert writer had arguments, remove them from the match
+                    # I would like to do this in the regex but i hate them.
+                    if ',' in found:
+                        found = found.split(',')[0]
                     break
 
-    return kek
+    return found
 
 
 def get_value(func, item, limit_to_one_value=False):

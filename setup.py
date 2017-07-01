@@ -18,7 +18,7 @@ setup(name='asserted',
       install_requires=[],
       python_requires='~=3.5',
       keyword='pytest, helper, automate',
-      classifiers = [
+      classifiers=[
                 'Development Status :: 2 - Pre-Alpha',
                 'Intended Audience :: Developers',
                 'License :: OSI Approved :: MIT License',
