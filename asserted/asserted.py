@@ -99,8 +99,10 @@ def assert_writer(func, include_private=False, only_attributes=False,
         if fixups:
             for fix in fixups:
                 if fix[0] == item:
-                    variable_name = "%s(%s)" % (fix[1], variable_name)
-                    value = "'%s'" % fix[2](value)
+                    if fix[1]:
+                        variable_name = "%s(%s)" % (fix[1], variable_name)
+                    value = '%s' % fix[2](value)
+                    repr(value)
 
         # Final assert line
         assert_line = "assert %s %s %s" % (variable_name, eq, value)

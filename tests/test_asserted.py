@@ -22,7 +22,8 @@ if sys.version_info >= (3, 4):
         return 'hey'
 
     def test_hey(tmpdir):
-        assert asserted.assert_writer(hey, save_path=str(tmpdir)) == ['hey = await hey.hey()\n        assert hey == "hey"']
+        assert asserted.assert_writer(hey, fixups=[('hey', '', lambda k:k.upper())],
+                                      save_path=str(tmpdir)) == ['hey = await hey.hey()\n        assert hey == "HEY"']
 
 
 def hello():
@@ -67,3 +68,4 @@ def test_ex():
         assert async_metod == "async_metod"
         async_metod_two = await ex.async_metod_two()
         assert async_metod_two == "async_metod_two"
+    asyncio.get_event_loop().run_until_complete(gogo())
