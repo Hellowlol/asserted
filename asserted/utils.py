@@ -33,6 +33,9 @@ def call_until_exhausted(value, item):
     if inspect.ismethod(value):
         value = value()
 
+    if inspect.isfunction(value):
+        value = value()
+
     while inspect.isawaitable(value):
         value = loop.run_until_complete(coro(value))
         was_async = True
@@ -64,21 +67,23 @@ def test_writer(test_prefix, name, caller, results, results_async=''):
 
 
 def get_caller(f, ln):
-    LOG.debug('Checking %s line %s to find what assertwriter was called with' % (f, ln))
+    LOG.debug('Checking %s line %s to find what assert_writer was called with' % (f, ln))
     found = ''
+    reg = re.compile('assert_writer\((.+)?\,?\)?')
     with open(os.path.abspath(f)) as f:
-        for i, line in enumerate(f.readlines(), 1):
-            if i == ln:
+        lines = f.readlines()
+        # We want to start from the ends since ln is the last line assert_writer was on.
+        # Incase the it spanned over serveral lines.
+        for line in reversed(lines[:ln + 1]):
+            found = re.search(reg, line)
+            if found:
+                found = found.group(1)
+                if ',' in found:
+                    found = found.split(',')[0]
 
-                found = re.search('assert_writer\((.+)\)', line)
-                if found:
-                    found = found.group(1)
-                    # Check if assert writer had arguments, remove them from the match
-                    # I would like to do this in the regex but i hate them.
-                    if ',' in found:
-                        found = found.split(',')[0]
-                    break
-
+                found = found.strip()
+                break
+    LOG.debug('assert_writer was called with %s' % found)
     return found
 
 

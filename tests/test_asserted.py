@@ -17,13 +17,12 @@ from .conftest import asserted
 
 
 if sys.version_info >= (3, 4):
-    #@asyncio.coroutine
+    @asyncio.coroutine
     async def hey():
         return 'hey'
 
-    @pytest.mark.xfail(reason='broken')
     def test_hey(tmpdir):
-        assert 'hey' in asserted.assert_writer(hey, save_path=str(tmpdir)) # broken fixme
+        assert asserted.assert_writer(hey, save_path=str(tmpdir)) == ['hey = await hey.hey()\n        assert hey == "hey"']
 
 
 def hello():
