@@ -38,7 +38,7 @@ def assert_writer(func, include_private=False, only_attributes=False,
     if fixups is None:
         fixups = []
 
-    if not save_path:
+    if not save_path:  # pragma: no cover
         save_path = os.path.expanduser('~/asserted')
         # no exists on py2.
         try:
