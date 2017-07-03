@@ -1,10 +1,16 @@
+import pytest
+
 from .conftest import asserted
 
+TODO = pytest.mark.skip(reason="need --runslow option to run")
 
+
+@TODO
 def test_indent():
     pass
 
 
+@TODO
 def test_wrap_in_asunc_func():
     pass
 
@@ -14,19 +20,21 @@ def test_check_value():
     assert asserted.utils.check_value(1) == 1
 
 
+@TODO
 def test_test_writer():
     pass
 
 
+@TODO
 def test_get_caller():
     pass
 
 
+@TODO
 def test_get_value():
     pass
     #assert asserted.utils.get_value('hello', 'z') == '"hello"'
     #assert asserted.utils.get_value(1, '') == 1
-
 
 
 def test_internals():

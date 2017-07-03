@@ -21,10 +21,10 @@ if sys.version_info >= (3, 4):
     async def hey():
         return 'hey'
 
-    def test_hey(dev):
+    def test_hey(path):
         r =  asserted.assert_writer(hey,
                                     fixups=[('hey', '', lambda k:k.upper())],
-                                    save_path=dev)
+                                    save_path=path)
 
         assert r == ['hey = await hey()\n        assert hey == "HEY"']
 
@@ -33,18 +33,18 @@ def hello():
     return 'is it me your looking for?'
 
 
-def test_multi(dev):
+def test_multi(path):
     asserted.assert_writer(asserted.example_class.Ex(), write_full_tests=True,
-                           save_path=dev, test_prefix='test_multi', separate_methods=True, sort_iterables=True)
+                           save_path=path, test_prefix='test_multi', separate_methods=True, sort_iterables=True)
 
 
-def test_asserted(dev):
+def test_asserted(path):
     asserted.assert_writer(asserted.example_class.Ex(), write_full_tests=True,
-                           save_path=dev, test_prefix='test_asserted', sort_iterables=True, separate_methods=False)
+                           save_path=path, test_prefix='test_asserted', sort_iterables=True, separate_methods=False)
 
 
-def test_asserted_as_function(dev):
-    r = asserted.assert_writer(hello, write_full_tests=True, test_prefix='test_asserted_as_function_', save_path=dev)
+def test_asserted_as_function(path):
+    r = asserted.assert_writer(hello, write_full_tests=True, test_prefix='test_asserted_as_function_', save_path=path)
     assert r == '''def test_asserted_as_function_hello():\n    \n    assert hello() == "is it me your looking for?"\n\n'''
 
 # This is the what test_asserted writes to files.

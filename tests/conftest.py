@@ -18,5 +18,6 @@ def pytest_addoption(parser):
                      help="Write new txt files")
 
 @pytest.fixture
-def dev(request, tmpdir):
+def path(request, tmpdir):
     return HERE if request.config.getoption("--dev") else str(tmpdir)
+
