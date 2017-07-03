@@ -12,18 +12,18 @@ LOG = logging.getLogger(__name__)
 
 def assert_writer(func, include_private=False, only_attributes=False,
                   write_full_tests=False, test_prefix='test_', save_path='',
-                  fixups=None, unpack_iterables=True, sort_iterables=False):
+                  fixups=None, unpack_iterables=True, separate_methods=True, sort_iterables=False):
     """Simple assert helper that takes automates some of the
        boiler plate when writing unit tests for pytest
 
        Args:
             func (callable): The object you want asserted
-            fn (func): filename
             include_private(bool): assert private vars too
             only_attributes(bool): Only add asserts with the attrs
             write_full_tests(bool): for simple copypasta
             save_path (string): default None
             test_prefix(str): Default test_
+            separate_methods(bool): False
             fixups(list): [('file_path', 'os.path.basename', os.path.basename)]
 
     """
@@ -49,6 +49,7 @@ def assert_writer(func, include_private=False, only_attributes=False,
 
     result = []
     result_async = []
+    methods = []
 
     if PY35 and inspect.isawaitable(func):
         loop = asyncio.get_event_loop()
@@ -102,7 +103,6 @@ def assert_writer(func, include_private=False, only_attributes=False,
                     if fix[1]:
                         variable_name = "%s(%s)" % (fix[1], variable_name)
                     value = '%s' % fix[2](value)
-                    repr(value)
 
         # Final assert line
         assert_line = "assert %s %s %s" % (variable_name, eq, value)
@@ -111,9 +111,16 @@ def assert_writer(func, include_private=False, only_attributes=False,
             inspect.iscoroutinefunction(cld) or was_async):
 
             assert_line = '%s = await %s\n%sassert %s %s %s' % (item, variable_name, ' ' * 8, item, eq, value)
-            result_async.append(assert_line)
+
+            if separate_methods and callable(cld):
+                methods.append((item, [], [assert_line]))
+            else:
+                result_async.append(assert_line)
         else:
-            result.append(assert_line)
+            if separate_methods and callable(cld):
+                methods.append((item, [assert_line], []))
+            else:
+                result.append(assert_line)
 
     if write_full_tests:
         caller = inspect.getframeinfo(inspect.stack()[1][0])
@@ -126,6 +133,14 @@ def assert_writer(func, include_private=False, only_attributes=False,
         fn = os.path.join(save_path, '%s_func.txt' % org_name)
         with open(fn, 'w') as file:
             file.write(t)
+
+            if separate_methods and methods:
+                for met in methods:
+                    file.write('\n\n')
+                    s_called_with = '%s.%s()' % (called_with, met[0])
+                    t = test_writer(test_prefix, met[0], s_called_with, met[1], met[2])
+                    file.write(t)
+
             LOG.info('All done. Wrote %s to disks' % os.path.abspath(fn))
         return t
 

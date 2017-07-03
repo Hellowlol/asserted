@@ -55,6 +55,7 @@ def check_value(value):
 
 def test_writer(test_prefix, name, caller, results, results_async=''):
     """Template for the test."""
+    LOG.debug('Writing test for %s' % name)
     result = indent(results, new_line=True)
 
     if results_async:
@@ -62,7 +63,7 @@ def test_writer(test_prefix, name, caller, results, results_async=''):
         results_async = wrap_in_asunc_func(results_async)
     else:
         results_async = ''
-    s = "def %s%s():\n    %s\n%s\n%s" % (test_prefix, name, caller, result, results_async)
+    s = "def %s%s():\n    %s\n%s%s" % (test_prefix, name, caller, result, results_async)
     return s
 
 
