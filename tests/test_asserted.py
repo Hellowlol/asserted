@@ -44,6 +44,7 @@ def test_asserted(dev):
 
 
 def test_asserted_as_function(dev):
+    r = asserted.assert_writer(hello, write_full_tests=True, test_prefix='test_asserted_as_function_', save_path=dev)
     assert r == '''def test_asserted_as_function_hello():\n    \n    assert hello() == "is it me your looking for?"\n\n'''
 
 # This is the what test_asserted writes to files.
