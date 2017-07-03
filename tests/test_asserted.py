@@ -21,30 +21,30 @@ if sys.version_info >= (3, 4):
     async def hey():
         return 'hey'
 
-    def _test_hey(tmpdir):
-        assert asserted.assert_writer(hey, fixups=[('hey', '', lambda k:k.upper())],
-                                      save_path=str(tmpdir)) == ['hey = await hey.hey()\n        assert hey == "HEY"']
+    def test_hey(dev):
+        r =  asserted.assert_writer(hey,
+                                    fixups=[('hey', '', lambda k:k.upper())],
+                                    save_path=dev)
+
+        assert r == ['hey = await hey()\n        assert hey == "HEY"']
 
 
 def hello():
     return 'is it me your looking for?'
 
-def test_multi(tmpdir):
+
+def test_multi(dev):
     asserted.assert_writer(asserted.example_class.Ex(), write_full_tests=True,
-                           save_path=str(tmpdir), separate_methods=True, sort_iterables=True)
+                           save_path=dev, test_prefix='test_multi', separate_methods=True, sort_iterables=True)
 
 
-def _test_asserted(tmpdir):
+def test_asserted(dev):
     asserted.assert_writer(asserted.example_class.Ex(), write_full_tests=True,
-                           save_path=str(tmpdir), sort_iterables=True)
+                           save_path=dev, test_prefix='test_asserted', sort_iterables=True, separate_methods=False)
 
 
-def _test_asserted_as_function(tmpdir):
-    r = asserted.assert_writer(hello, write_full_tests=True, save_path=str(tmpdir))
-    assert r == """def test_hello():
-    hello = hello
-    assert hello.hello() == "is it me your looking for?"
-"""
+def test_asserted_as_function(dev):
+    assert r == '''def test_asserted_as_function_hello():\n    \n    assert hello() == "is it me your looking for?"\n\n'''
 
 # This is the what test_asserted writes to files.
 # find a way to test that dynamically.

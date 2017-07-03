@@ -27,9 +27,10 @@ def assert_writer(func, include_private=False, only_attributes=False,
             fixups(list): [('file_path', 'os.path.basename', os.path.basename)]
 
     """
+    _org_func = func
 
     # Lets see if func belongs to a class. If not we are gonna add it to a class.
-    if func.__class__.__name__ == 'function':  # Please find a better way..
+    if inspect.isfunction(func):
         LOG.debug('Created parent class %s' % func.__name__)
         func = type(func.__name__, (object,), {func.__name__: staticmethod(func)})
         # So the filename if the function name instead of type.
@@ -63,7 +64,10 @@ def assert_writer(func, include_private=False, only_attributes=False,
 
     for item in attrs:
         assert_line = ''
-        variable_name = '%s.%s' % (org_name, item)
+        if inspect.isfunction(_org_func):
+            variable_name = '%s' % item
+        else:
+            variable_name = '%s.%s' % (org_name, item)
 
         value, was_async = get_value(func, item)
 
@@ -129,19 +133,26 @@ def assert_writer(func, include_private=False, only_attributes=False,
         func_call_name = get_caller(caller.filename, caller.lineno)
         # Make the first assert line
         called_with = '%s = %s' % (org_name, func_call_name)
-        t = test_writer(test_prefix, org_name, called_with, result, result_async)
-        fn = os.path.join(save_path, '%s_func.txt' % org_name)
-        with open(fn, 'w') as file:
-            file.write(t)
 
+        fn = os.path.join(save_path, '%s_%s.txt' % (test_prefix, org_name))
+        with open(fn, 'w') as file:
+            # So we dont write a test for a single function
+            if len(result) > 1:
+                t = test_writer(test_prefix, org_name, called_with, result, result_async)
+                file.write(t)
             if separate_methods and methods:
                 for met in methods:
-                    file.write('\n\n')
-                    s_called_with = '%s.%s()' % (called_with, met[0])
-                    t = test_writer(test_prefix, met[0], s_called_with, met[1], met[2])
+                    if inspect.isfunction(_org_func):
+                        called_with = ''
+                    t = test_writer(test_prefix, met[0], called_with, met[1], met[2])
                     file.write(t)
 
             LOG.info('All done. Wrote %s to disks' % os.path.abspath(fn))
         return t
 
-    return result + result_async
+    clean = []
+    for i in methods:
+        if i[2]:
+            clean.append(i[2][0])
+
+    return result + result_async + clean
