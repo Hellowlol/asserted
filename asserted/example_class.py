@@ -2,6 +2,10 @@ import asyncio
 import datetime
 
 
+def hey():
+    return 'hey'
+
+
 class Ex(object):
     def __init__(self):
         self.data = 'data'

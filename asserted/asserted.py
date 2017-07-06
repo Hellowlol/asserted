@@ -12,7 +12,7 @@ LOG = logging.getLogger(__name__)
 
 def assert_writer(func, include_private=False, only_attributes=False,
                   write_full_tests=False, test_prefix='test_', save_path='',
-                  fixups=None, unpack_iterables=True, separate_methods=True, sort_iterables=False):
+                  fixups=None, unpack_iterables=True, separate_methods=True, sort_iterables=False, caller_name='', **kwargs):
     """Simple assert helper that takes automates some of the
        boiler plate when writing unit tests for pytest
 
@@ -28,6 +28,7 @@ def assert_writer(func, include_private=False, only_attributes=False,
 
     """
     _org_func = func
+    caller_name = caller_name
 
     # Lets see if func belongs to a class. If not we are gonna add it to a class.
     if inspect.isfunction(func):
@@ -127,12 +128,13 @@ def assert_writer(func, include_private=False, only_attributes=False,
                 result.append(assert_line)
 
     if write_full_tests:
-        caller = inspect.getframeinfo(inspect.stack()[1][0])
-        # Extract the code that was passed as
-        # func from the source code.
-        func_call_name = get_caller(caller.filename, caller.lineno)
+        if not caller_name:
+            caller = inspect.getframeinfo(inspect.stack()[1][0])
+            # Extract the code that was passed as
+            # func from the source code.
+            caller_name = get_caller(caller.filename, caller.lineno)
         # Make the first assert line
-        called_with = '%s = %s' % (org_name, func_call_name)
+        called_with = '%s = %s' % (org_name, caller_name)
 
         fn = os.path.join(save_path, '%s_%s.txt' % (test_prefix, org_name))
         with open(fn, 'w') as file:

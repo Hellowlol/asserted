@@ -6,6 +6,16 @@ import re
 from .compat import *
 
 LOG = logging.getLogger(__name__)
+REG_CLASS = re.compile('^class\s(\w+\(?\w+?\)?):')
+REG_FUNC = re.compile('^def\s(\w+\(?\)?):')
+
+
+def loader(path):
+    # https://stackoverflow.com/questions/67631/how-to-import-a-module-given-the-full-path
+    # fix me for compat
+    from importlib.machinery import SourceFileLoader
+    m = SourceFileLoader(os.path.basename(path), path).load_module()
+    return m
 
 
 def indent(text, char=' ', indentation=4, new_line=True):
@@ -16,7 +26,7 @@ def indent(text, char=' ', indentation=4, new_line=True):
             return ''.join(padding + line for line in text)
 
 
-def wrap_in_asunc_func(v):
+def wrap_in_asunc_func(v): # Change to coro
     x = '\n    async def gogo():\n%s\n    asyncio.get_event_loop().run_until_complete(gogo())' % v
 
     return x
