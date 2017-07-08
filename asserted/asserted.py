@@ -12,7 +12,7 @@ LOG = logging.getLogger(__name__)
 
 def assert_writer(func, include_private=False, only_attributes=False,
                   write_full_tests=False, test_prefix='test_', save_path='',
-                  fixups=None, unpack_iterables=True, separate_methods=True, sort_iterables=False, caller_name='', **kwargs):
+                  fixups=None, separate_methods=True, sort_iterables=False, caller_name='', **kwargs):
     """Simple assert helper that takes automates some of the
        boiler plate when writing unit tests for pytest
 
@@ -136,7 +136,7 @@ def assert_writer(func, include_private=False, only_attributes=False,
         # Make the first assert line
         called_with = '%s = %s' % (org_name, caller_name)
 
-        fn = os.path.join(save_path, '%s_%s.txt' % (test_prefix, org_name))
+        fn = os.path.join(save_path, '%s%s.txt' % (test_prefix, org_name))
         with open(fn, 'w') as file:
             # So we dont write a test for a single function
             if len(result) > 1:

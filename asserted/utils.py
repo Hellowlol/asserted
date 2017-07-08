@@ -8,6 +8,7 @@ from .compat import *
 LOG = logging.getLogger(__name__)
 REG_CLASS = re.compile('^class\s(\w+\(?\w+?\)?):')
 REG_FUNC = re.compile('^def\s(\w+\(?\)?):')
+TO_REMOVE = re.compile('(\(.*?\))')
 
 
 def loader(path):
