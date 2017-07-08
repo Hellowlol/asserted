@@ -41,11 +41,13 @@ def call_until_exhausted(value, item):
     async def coro(hello):
         return await hello
 
-    if inspect.ismethod(value):
-        value = value()
+    if inspect.ismethod(value) or inspect.isfunction(value):
+        try:
+            value = value()
+        except Exception as e:
+            value = 'SOME_EXCEPTION'
+            # Check if we can handle this so with can use with pytest raises..
 
-    if inspect.isfunction(value):
-        value = value()
 
     while inspect.isawaitable(value):
         value = loop.run_until_complete(coro(value))

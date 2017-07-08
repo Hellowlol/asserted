@@ -1,0 +1,59 @@
+def test_ex():
+    ex = Ex()
+    assert ex.att1 == "att1"
+    assert ex.data == "data"
+    assert str(ex.is_datetime.date()) == "1970-01-01"
+    assert ex.is_dict == {'b': 'b', 'a': 'a'}
+    assert ex.is_false is False
+    assert ex.is_float == 0.5
+    assert list(ex.is_generator_expression) == [0, 1]
+    assert ex.is_int == 1
+    assert ex.is_list == [5, 4, 3, 2, 1]
+    assert ex.is_true is True
+    assert ex.is_tuple == (3, 2, 1)
+    assert ex.props == "props"
+
+def test_a_classmethod():
+    ex = Ex()
+    assert ex.a_classmethod() == "a_classmethod"
+
+def test_a_coro_with_return():
+    ex = Ex()
+
+    async def gogo():
+        a_coro_with_return = await ex.a_coro_with_return()
+        assert a_coro_with_return == "a_coro_with_return"
+    asyncio.get_event_loop().run_until_complete(gogo())
+
+def test_a_generator_function():
+    ex = Ex()
+    assert list(ex.a_generator_function()) == [0, 1, 2]
+
+def test_a_staticmethod():
+    ex = Ex()
+    assert ex.a_staticmethod() == "a_staticmethod"
+
+def test_async_metod():
+    ex = Ex()
+
+    async def gogo():
+        async_metod = await ex.async_metod()
+        assert async_metod == "async_metod"
+    asyncio.get_event_loop().run_until_complete(gogo())
+
+def test_async_metod_two():
+    ex = Ex()
+
+    async def gogo():
+        async_metod_two = await ex.async_metod_two()
+        assert async_metod_two == "async_metod_two"
+    asyncio.get_event_loop().run_until_complete(gogo())
+
+def test_method():
+    ex = Ex()
+    assert ex.method() == "method"
+
+def test_missing_a_arg():
+    ex = Ex()
+    assert ex.missing_a_arg() == "Missing_ARG"
+

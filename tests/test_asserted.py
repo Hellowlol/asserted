@@ -58,12 +58,15 @@ def test_ex():
     assert ex.data == "data"
     assert str(ex.is_datetime.date()) == "1970-01-01"
     assert sorted(ex.is_dict.items()) == [('a', 'a'), ('b', 'b')]
+    assert ex.is_false is False
     assert ex.is_float == 0.5
     assert sorted(list(ex.is_generator_expression)) == [0, 1]
     assert ex.is_int == 1
     assert sorted(ex.is_list) == [1, 2, 3, 4, 5]
+    assert ex.is_true is True
     assert sorted(ex.is_tuple) == [1, 2, 3]
     assert ex.method() == "method"
+    #assert ex.missing_a_arg() == "SOME_EXCEPTION"
     assert ex.props == "props"
 
     async def gogo():
@@ -74,3 +77,5 @@ def test_ex():
         async_metod_two = await ex.async_metod_two()
         assert async_metod_two == "async_metod_two"
     asyncio.get_event_loop().run_until_complete(gogo())
+
+

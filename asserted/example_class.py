@@ -49,3 +49,6 @@ class Ex(object):
     def a_generator_function(self):
         for i in range(3):
             yield i
+
+    def missing_a_arg(self, arg):
+        return

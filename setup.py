@@ -21,7 +21,7 @@ setup(name='asserted',
       #use_scm_version = {"root": "..", "relative_to": __file__},
       install_requires=[],
       python_requires='~=3.5',
-      keyword='pytest, helper, automate',
+      keywords='pytest, helper, automate',
       classifiers=[
                 'Development Status :: 2 - Pre-Alpha',
                 'Intended Audience :: Developers',
