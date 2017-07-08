@@ -1,4 +1,0 @@
-def test_asserted_as_function_hello():
-    
-    assert hello() == "is it me your looking for?"
-

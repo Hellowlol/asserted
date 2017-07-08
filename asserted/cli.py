@@ -11,6 +11,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 from asserted.utils import loader, REG_CLASS, REG_FUNC, TO_REMOVE
 from asserted import assert_writer
 
+print(sys.argv)
 
 def get_args():
 
@@ -27,7 +28,7 @@ def get_args():
     parser.add_argument('-tp', '--test_prefix', action='store_false', default='test_',
                         help='test prefix')
 
-    parser.add_argument('-sp', '--save_path', action='store_false', default='',
+    parser.add_argument('-sp', '--save_path', default='',
                         help='savepath')
 
     parser.add_argument('-sm', '--separate_methods', action='store_true', default=True,
