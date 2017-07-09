@@ -14,27 +14,27 @@ from asserted import assert_writer
 
 def get_args():
 
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description='A simple tool to write tests for pytest.')
 
     parser.add_argument('fp', help='The file you want to write test for.')
 
     parser.add_argument('-oa', '--only_attributes', action='store_false', default=False,
-                        help='only attributes')
+                        help='Only assert attributes, skip methods.')
 
     parser.add_argument('-wf', '--write_full_tests', action='store_true', default=True,
-                        help='write tests')
+                        help='Write a test suite for fp')
 
     parser.add_argument('-tp', '--test_prefix', action='store_false', default='test_',
-                        help='test prefix')
+                        help='Prefix for tests. This is used by pytest to pickup the tests-')
 
     parser.add_argument('-sp', '--save_path', default='',
-                        help='savepath')
+                        help='Where to save the output of the test.')
 
     parser.add_argument('-sm', '--separate_methods', action='store_true', default=True,
                         help='Separate methods to there own test functions.')
 
     parser.add_argument('-st', '--sort_iterables', action='store_true', default=False,
-                        help='Separate methods to there own test functions.')
+                        help='Sort interables to ensure test consistency')
     parser.add_argument('-q', action='store_true', default=False,
                         help='Disable logging.')
 
