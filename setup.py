@@ -4,6 +4,7 @@ from setuptools import find_packages, setup
 def read_me():
     try:
         import pypandoc
+        return pypandoc.convert('README.md', 'rst')
     except ImportError:
         return open('README.md', 'r').read()
 
