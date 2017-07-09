@@ -28,7 +28,8 @@ setup(name='asserted',
                 'Development Status :: 2 - Pre-Alpha',
                 'Intended Audience :: Developers',
                 'License :: OSI Approved :: MIT License',
-                'Programming Language :: Python :: 3.6', # Add more?
+                'Programming Language :: Python :: 3.5',
+                'Programming Language :: Python :: 3.6',
 
 
       ],

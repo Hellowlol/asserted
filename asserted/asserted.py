@@ -21,7 +21,7 @@ def assert_writer(func, include_private=False, only_attributes=False,
             include_private(bool): assert private vars too
             only_attributes(bool): Only add asserts with the attrs
             write_full_tests(bool): for simple copypasta
-            save_path (string): default None
+            save_path (string): default ''
             test_prefix(str): Default test_
             separate_methods(bool): False
             fixups(list): [('file_path', 'os.path.basename', os.path.basename)]
@@ -137,6 +137,7 @@ def assert_writer(func, include_private=False, only_attributes=False,
             if len(result) > 1:
                 t = test_writer(test_prefix, org_name, called_with, result, result_async)
                 file.write(t)
+
             if separate_methods and methods:
                 for met in methods:
                     if inspect.isfunction(_org_func):
