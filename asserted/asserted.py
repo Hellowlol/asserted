@@ -1,8 +1,8 @@
 import datetime
+import inspect
 import logging
 
 from .utils import *
-from .compat import *
 
 __all__ = ['assert_writer']
 
@@ -42,18 +42,13 @@ def assert_writer(func, include_private=False, only_attributes=False,
 
     if not save_path:  # pragma: no cover
         save_path = os.path.expanduser('~/asserted')
-        # no exists on py2.
-        try:
-            os.makedirs(save_path)
-        except OSError:
-            if not os.path.isdir(save_path):
-                raise
+        os.makedirs(save_path, exist_ok=True)
 
     result = []
     result_async = []
     methods = []
 
-    if PY35 and inspect.isawaitable(func):
+    if inspect.isawaitable(func):
         loop = asyncio.get_event_loop()
         LOG.debug('%s is awaitable executing in eventloop' % func)
         func = loop.run_until_complete(func)

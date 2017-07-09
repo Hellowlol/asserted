@@ -1,9 +1,9 @@
 import asyncio
 import os
+import inspect
 import logging
 import re
 
-from .compat import *
 
 LOG = logging.getLogger(__name__)
 REG_CLASS = re.compile('^class\s(\w+\(?\w+?\)?):')
@@ -12,29 +12,30 @@ TO_REMOVE = re.compile('(\(.*?\))')
 
 
 def loader(path):
+    """Load the sourcecode."""
     # https://stackoverflow.com/questions/67631/how-to-import-a-module-given-the-full-path
-    # fix me for compat
     from importlib.machinery import SourceFileLoader
     m = SourceFileLoader(os.path.basename(path), path).load_module()
     return m
 
 
 def indent(text, char=' ', indentation=4, new_line=True):
-        padding = char * indentation
-        if new_line:
-            return '\n'.join(padding + line for line in text)
-        else:
-            return ''.join(padding + line for line in text)
+    """Helper for indentation."""
+    padding = char * indentation
+    if new_line:
+        return '\n'.join(padding + line for line in text)
+    else:
+        return ''.join(padding + line for line in text)
 
 
-def wrap_in_asunc_func(v): # Change to coro
+def wrap_in_asunc_func(v):
+    """A template for a async function."""
     x = '\n    async def gogo():\n%s\n    asyncio.get_event_loop().run_until_complete(gogo())' % v
-
     return x
 
 
 def call_until_exhausted(value, item):
-    """"""
+    """Get a value."""
     loop = asyncio.get_event_loop()
     was_async = False
 
@@ -47,7 +48,6 @@ def call_until_exhausted(value, item):
         except Exception as e:
             value = 'SOME_EXCEPTION'
             # Check if we can handle this so with can use with pytest raises..
-
 
     while inspect.isawaitable(value):
         value = loop.run_until_complete(coro(value))
@@ -82,6 +82,7 @@ def test_writer(test_prefix, name, caller, results, results_async=''):
 
 
 def get_caller(f, ln):
+    """Helper for get the code that assert_writer was called with."""
     LOG.debug('Checking %s line %s to find what assert_writer was called with' % (f, ln))
     found = ''
     reg = re.compile('assert_writer\((.+)?\,?\)?')
@@ -104,14 +105,12 @@ def get_caller(f, ln):
 
 def get_value(func, item, limit_to_one_value=False):
     """Get result from the attr call and if it required a async call."""
-
     name = func.__class__.__name__
     name = '%s.%s' % (name, item)
     was_async = False
     value = getattr(func, item)
 
-    if PY35:
-        value, was_async = call_until_exhausted(value, item)
+    value, was_async = call_until_exhausted(value, item)
 
     if callable(value):
         value = value()
