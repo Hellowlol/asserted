@@ -5,13 +5,12 @@ import re
 import sys
 
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+#sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 
 from asserted.utils import loader, REG_CLASS, REG_FUNC, TO_REMOVE
 from asserted import assert_writer
 
-print(sys.argv)
 
 def get_args():
 

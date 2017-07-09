@@ -1,22 +1,24 @@
 from setuptools import find_packages, setup
 
 
-
-
-
-README = None
+def read_me():
+    try:
+        import pypandoc
+    except ImportError:
+        return open('README.md', 'r').read()
 
 
 setup(name='asserted',
-      version='0.0.1',
+      #version='0.0.1',
       description='pytest assert writer',
+      long_description=read_me(),
       license='MIT',
       author='Hellowlol',
       author_email='hellowlol1@gmail.com',
       url='https://github.com/Hellowlol/asserted',
       #download_url='https://github.com/hellowlol/asserted/archive/0.0.1.tar.gz',
       packages=find_packages(exclude=['docs', 'tests*']),
-      setup_requires=['setuptools_scm'],
+      setup_requires=['pypandoc', 'setuptools_scm'],
       use_scm_version=True,
       #use_scm_version = {"root": "..", "relative_to": __file__},
       install_requires=[],
@@ -30,5 +32,10 @@ setup(name='asserted',
 
 
       ],
+      entry_points={
+        'console_scripts': [
+            'asserted=asserted.cli:main',
+        ]
+    },
 
      )
