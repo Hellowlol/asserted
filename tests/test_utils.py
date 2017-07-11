@@ -5,6 +5,16 @@ from .conftest import asserted
 TODO = pytest.mark.skip(reason="Not implemented")
 
 
+class T():
+    def __init__(self):
+        self.a = 'a'
+        self.b = 'b'
+        self._p = '_p'
+
+    def c(self):
+        return
+
+
 @TODO
 def test_loader():
     pass
@@ -35,23 +45,12 @@ def test_get_caller():
     pass
 
 
-@TODO
 def test_get_value():
-    pass
-    #assert asserted.utils.get_value('hello', 'z') == '"hello"'
-    #assert asserted.utils.get_value(1, '') == 1
+    assert asserted.utils.get_value(T(), 'a') == '"a"'
+    assert asserted.utils.get_value(T(), 'c') == '"c"'
 
 
 def test_internals():
-    class T():
-        def __init__(self):
-            self.a = 'a'
-            self.b = 'b'
-            self._p = '_p'
-
-        def c(self):
-            return
-
     assert asserted.utils.internals(T(), only_attributes=True) == ['a', 'b']
     assert asserted.utils.internals(T(), only_attributes=False) == ['a', 'b', 'c']
     assert asserted.utils.internals(T(), only_attributes=False, include_private=True) == ['_p', 'a', 'b', 'c']
