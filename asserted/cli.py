@@ -6,7 +6,7 @@ from asserted.utils import loader, REG_CLASS, REG_FUNC, TO_REMOVE
 from asserted import assert_writer
 
 
-def get_args():
+def get_args():  # pragma: no cover
 
     parser = argparse.ArgumentParser(description='A simple tool to write tests for pytest.')
 
@@ -81,8 +81,11 @@ def run(d, params):
         assert_writer(class_or_func, caller_name='%s()' % class_or_func.__name__, **params)
 
 
-def main():
-    params, fp = get_args()
+def main(args):
+    if args is None:
+        args = get_args()
+
+    params, fp = args
 
     for item in get_stuff_to_assert(fp):
         run(item, params)

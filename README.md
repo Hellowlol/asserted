@@ -9,8 +9,27 @@ This is no way near perfect, you still have to handle imports, fixtures at but i
 
 #### CLI:
 asserted path/to/file
-use -h to see all the options.
+```
+usage: asserted [-h] [-oa] [-wf] [-tp] [-sp SAVE_PATH] [-sm] [-st] [-q] fp
 
+positional arguments:
+  fp                    The file you want to write test for.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -oa, --only_attributes
+                        only attributes
+  -wf, --write_full_tests
+                        write tests
+  -tp, --test_prefix    test prefix
+  -sp SAVE_PATH, --save_path SAVE_PATH
+                        savepath
+  -sm, --separate_methods
+                        Separate methods to there own test functions.
+  -st, --sort_iterables
+                        Separate methods to there own test functions.
+  -q                    Disable logging.
+```
 
 #### Code:
 Say you have a class like:
@@ -60,10 +79,12 @@ class Ex(object):
         return arg
 ````
 
+````
+assert_write(asserted.example_class.Ex(), write_full_tests=True, separate_methods=True, sort_iterables=True)
+# Will create the code below.
+````
 
 ````
-assert_write(asserted.example_class.Ex(), write_full_tests=True, separate_methods=True, sort_iterables=True)  #  will create a this file:
-
 def test_ex():
     ex = asserted.example_class.Ex()
     assert ex.att1 == "att1"

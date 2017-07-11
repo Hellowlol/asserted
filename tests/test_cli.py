@@ -1,11 +1,18 @@
 import os
 import pytest
 
-from .conftest import PATH
+from .conftest import PATH, cli
 
 pytest_plugins = ["pytester"]
 
 
-def test_cli(run_cli, tmpdir, path):
+def test_cli(tmpdir, path):
     f = os.path.join(str(PATH), 'asserted', 'example_class.py')
-    run_cli(f, '-sp', path)
+    print('fuck', f)
+
+    d = {'write_full_tests': True,
+         'save_path': path,
+         'separate_methods': True,
+         'sort_iterables': True}
+
+    cli.main((d, f))
