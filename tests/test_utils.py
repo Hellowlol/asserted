@@ -46,8 +46,8 @@ def test_get_caller():
 
 
 def test_get_value():
-    assert asserted.utils.get_value(T(), 'a') == '"a"'
-    assert asserted.utils.get_value(T(), 'c') == '"c"'
+    assert asserted.utils.get_value(T(), 'a') == ('a', False)
+    assert asserted.utils.get_value(T(), 'c') == (None, False)
 
 
 def test_internals():
