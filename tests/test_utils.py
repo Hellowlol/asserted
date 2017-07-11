@@ -2,12 +2,17 @@ import pytest
 
 from .conftest import asserted
 
-TODO = pytest.mark.skip(reason="need --runslow option to run")
+TODO = pytest.mark.skip(reason="Not implemented")
 
 
 @TODO
-def test_indent():
+def test_loader():
     pass
+
+
+def test_indent():
+    assert asserted.utils.indent(['a']) == '    a'
+    assert asserted.utils.indent(['b'], new_line=False) == '    b'
 
 
 @TODO
